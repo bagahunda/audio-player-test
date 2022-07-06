@@ -66,10 +66,12 @@
     </div>
     <div
       class="player__section player__section--volume"
-      :class="{ 'player__section--muted': player && player.volume === 0 }"
+      :class="{
+        'player__section--muted': player && player.volume === 0 && player.muted,
+      }"
     >
       <div class="player__button" @click="toggleMute">
-        <template v-if="player && player.volume !== 0">
+        <template v-if="player && player.volume !== 0 && !player.muted">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -265,21 +267,24 @@ export default class AppPlayer extends Vue {
   public setVolume(e: Event) {
     if (this.player) {
       this.player.volume = +(e.target as HTMLInputElement).value;
+      this.player.muted = false;
     }
   }
 
   public toggleMute() {
     if (this.player && this.status === PlayerStatus.playing) {
-      const currentVolume = this.player?.volume || 0;
+      const currentVolume = this.player.muted ? 0 : this.player?.volume || 0;
       if (currentVolume > 0) {
         this.lastVolume = currentVolume;
         this.player.volume = 0;
+        this.player.muted = true;
       } else {
         if (this.lastVolume) {
           this.player.volume = this.lastVolume;
         } else {
           this.player.volume = 1;
         }
+        this.player.muted = false;
       }
     }
   }
