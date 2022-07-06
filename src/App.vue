@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <template v-if="!error && trackList.length">
-      <app-player />
+      <div class="player-container">
+        <app-player />
+      </div>
       <div class="container">
         <track-list />
       </div>
@@ -252,5 +254,11 @@ a:not([href]):not([tabindex]):focus {
   justify-content: center;
   flex-direction: column;
   height: 100vh;
+}
+
+.player-container {
+  position: sticky;
+  top: 0;
+  background-color: white;
 }
 </style>
